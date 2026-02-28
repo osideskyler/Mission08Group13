@@ -1,3 +1,4 @@
+@model IEnumerable<Mission08Group13.Models.TaskItem>
 @{
     ViewData["Title"] = "Quadrants";
 }
@@ -19,36 +20,29 @@
           <small class="text-muted">Due soon or overdue</small>
         </div>
         <div class="card-body">
-          
-          <!-- Example loop placeholder -->
-          @* foreach (var task in Model.Quadrant1) { *@
-          
+          @foreach (var task in Model.Where(t => t.Quadrant == 1))
+          {
             <div class="task-card mb-2">
               <div class="d-flex justify-content-between align-items-start">
                 <div>
-                  <h4 class="mb-1">Task Title</h4>
-                  <div class="small text-muted">Category — Due: 2026-03-01</div>
+                  <h4 class="mb-1">@task.Name</h4>
+                  <div class="small text-muted">@task.Category — Due: @(task.DueDate?.ToString("yyyy-MM-dd") ?? "—")</div>
                 </div>
                 <div class="btn-group btn-group-sm" role="group" aria-label="task actions">
-                  <!-- Edit: simple anchor to Edit page -->
-                  <a href="/Tasks/Edit/123" class="btn btn-outline-secondary">Edit</a>
-                  
-                  <form method="post" action="/Tasks/Complete/123" class="d-inline">
-                    @* @Html.AntiForgeryToken() *@
+                  <a asp-controller="Tasks" asp-action="Create" asp-route-id="@task.Id" class="btn btn-outline-secondary">Edit</a>
+                  <form method="post" asp-controller="Tasks" asp-action="Complete" asp-route-id="@task.Id" class="d-inline">
+                    @Html.AntiForgeryToken()
                     <button type="submit" class="btn btn-outline-success">Complete</button>
                   </form>
-
-                  <!-- Delete: triggered via modal or direct form submit -->
-                  <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#confirmDeleteModal" data-taskid="123">Delete</button>
+                  <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-taskid="@task.Id" data-taskname="@task.Name" data-taskdue="@(task.DueDate?.ToString("yyyy-MM-dd") ?? "—")">Delete</button>
                 </div>
               </div>
-              <!-- optional: truncated description -->
-              <p class="mt-2 mb-0 text-truncate">Short description…</p>
             </div>
-          @* } *@
-
-          <!-- If no tasks -->
-          <!-- <p class="text-muted">No tasks in this quadrant.</p> -->
+          }
+          @if (!Model.Any(t => t.Quadrant == 1))
+          {
+            <p class="text-muted">No tasks in this quadrant.</p>
+          }
         </div>
       </div>
     </div>
@@ -61,7 +55,29 @@
           <small class="text-muted">Plan and schedule</small>
         </div>
         <div class="card-body">
-          <!-- foreach tasks for quadrant 2, same partial -->
+          @foreach (var task in Model.Where(t => t.Quadrant == 2))
+          {
+            <div class="task-card mb-2">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h4 class="mb-1">@task.Name</h4>
+                  <div class="small text-muted">@task.Category — Due: @(task.DueDate?.ToString("yyyy-MM-dd") ?? "—")</div>
+                </div>
+                <div class="btn-group btn-group-sm" role="group" aria-label="task actions">
+                  <a asp-controller="Tasks" asp-action="Create" asp-route-id="@task.Id" class="btn btn-outline-secondary">Edit</a>
+                  <form method="post" asp-controller="Tasks" asp-action="Complete" asp-route-id="@task.Id" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-outline-success">Complete</button>
+                  </form>
+                  <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-taskid="@task.Id" data-taskname="@task.Name" data-taskdue="@(task.DueDate?.ToString("yyyy-MM-dd") ?? "—")">Delete</button>
+                </div>
+              </div>
+            </div>
+          }
+          @if (!Model.Any(t => t.Quadrant == 2))
+          {
+            <p class="text-muted">No tasks in this quadrant.</p>
+          }
         </div>
       </div>
     </div>
@@ -76,7 +92,29 @@
           <small class="text-muted">Delegate or handle quickly</small>
         </div>
         <div class="card-body">
-          <!-- foreach tasks for quadrant 3 -->
+          @foreach (var task in Model.Where(t => t.Quadrant == 3))
+          {
+            <div class="task-card mb-2">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h4 class="mb-1">@task.Name</h4>
+                  <div class="small text-muted">@task.Category — Due: @(task.DueDate?.ToString("yyyy-MM-dd") ?? "—")</div>
+                </div>
+                <div class="btn-group btn-group-sm" role="group" aria-label="task actions">
+                  <a asp-controller="Tasks" asp-action="Create" asp-route-id="@task.Id" class="btn btn-outline-secondary">Edit</a>
+                  <form method="post" asp-controller="Tasks" asp-action="Complete" asp-route-id="@task.Id" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-outline-success">Complete</button>
+                  </form>
+                  <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-taskid="@task.Id" data-taskname="@task.Name" data-taskdue="@(task.DueDate?.ToString("yyyy-MM-dd") ?? "—")">Delete</button>
+                </div>
+              </div>
+            </div>
+          }
+          @if (!Model.Any(t => t.Quadrant == 3))
+          {
+            <p class="text-muted">No tasks in this quadrant.</p>
+          }
         </div>
       </div>
     </div>
@@ -89,7 +127,29 @@
           <small class="text-muted">Low priority</small>
         </div>
         <div class="card-body">
-          <!-- foreach tasks for quadrant 4 -->
+          @foreach (var task in Model.Where(t => t.Quadrant == 4))
+          {
+            <div class="task-card mb-2">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h4 class="mb-1">@task.Name</h4>
+                  <div class="small text-muted">@task.Category — Due: @(task.DueDate?.ToString("yyyy-MM-dd") ?? "—")</div>
+                </div>
+                <div class="btn-group btn-group-sm" role="group" aria-label="task actions">
+                  <a asp-controller="Tasks" asp-action="Create" asp-route-id="@task.Id" class="btn btn-outline-secondary">Edit</a>
+                  <form method="post" asp-controller="Tasks" asp-action="Complete" asp-route-id="@task.Id" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-outline-success">Complete</button>
+                  </form>
+                  <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-taskid="@task.Id" data-taskname="@task.Name" data-taskdue="@(task.DueDate?.ToString("yyyy-MM-dd") ?? "—")">Delete</button>
+                </div>
+              </div>
+            </div>
+          }
+          @if (!Model.Any(t => t.Quadrant == 4))
+          {
+            <p class="text-muted">No tasks in this quadrant.</p>
+          }
         </div>
       </div>
     </div>
@@ -102,18 +162,33 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="confirmDeleteLabel">Confirm Delete</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <p>Are you sure you want to delete <strong id="modal-task-title">[Task Title]</strong> (Due: <span id="modal-task-due">[Due]</span>)?</p>
       </div>
       <div class="modal-footer">
-        <form method="post" id="modal-delete-form" action="/Tasks/Delete/123">
-          @* @Html.AntiForgeryToken() *@
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <form method="post" id="modal-delete-form" action="">
+          @Html.AntiForgeryToken()
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
           <button type="submit" class="btn btn-danger">Delete</button>
         </form>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+  document.getElementById('confirmDeleteModal').addEventListener('show.bs.modal', function (event) {
+    var button = event.relatedTarget;
+    if (button && button.getAttribute('data-taskid')) {
+      var id = button.getAttribute('data-taskid');
+      var name = button.getAttribute('data-taskname') || '[Task Title]';
+      var due = button.getAttribute('data-taskdue') || '[Due]';
+      var form = document.getElementById('modal-delete-form');
+      form.action = '/Tasks/Delete/' + id;
+      document.getElementById('modal-task-title').textContent = name;
+      document.getElementById('modal-task-due').textContent = due;
+    }
+  });
+</script>
