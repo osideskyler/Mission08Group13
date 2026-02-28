@@ -1,0 +1,86 @@
+﻿@model Mission08Group13.Models.TaskItem
+@{
+    ViewData["Title"] = "Create Task";
+    Layout = "_Layout";
+}
+
+<h2>Create Task</h2>
+
+@if (ViewBag.SubmittedTask != null)
+{
+    <div class="alert alert-success">
+        Task '@ViewBag.SubmittedTask' submitted.
+    </div>
+}
+
+<form asp-action="Create" method="post">
+
+    <!-- Task Name -->
+    <div class="mb-3 row">
+        <label asp-for="Name" class="col-sm-2 col-form-label">Task</label>
+        <div class="col-sm-6">
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+    </div>
+
+    <!-- Due Date -->
+    <div class="mb-3 row">
+        <label asp-for="DueDate" class="col-sm-2 col-form-label">Due Date</label>
+        <div class="col-sm-6">
+            <input asp-for="DueDate" type="date" class="form-control" />
+        </div>
+    </div>
+
+    <!-- Quadrant -->
+    <div class="mb-3 row">
+        <label asp-for="Quadrant" class="col-sm-2 col-form-label">Quadrant</label>
+        <div class="col-sm-6">
+            <select asp-for="Quadrant" class="form-select">
+                <option value="">-- Select Quadrant --</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+            </select>
+            <span asp-validation-for="Quadrant" class="text-danger"></span>
+        </div>
+    </div>
+
+    <!-- Category -->
+    <div class="mb-3 row">
+        <label asp-for="Category" class="col-sm-2 col-form-label">Category</label>
+        <div class="col-sm-6">
+            <select asp-for="Category" class="form-select">
+                <option value="">-- Select Category --</option>
+                <option>Home</option>
+                <option>School</option>
+                <option>Work</option>
+                <option>Church</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Completed Bool -->
+    <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label">Completed</label>
+        <div class="col-sm-6">
+            <div class="form-check form-check-inline">
+                <input asp-for="Completed" type="radio" class="form-check-input" value="true" />
+                <label class="form-check-label">True</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input asp-for="Completed" type="radio" class="form-check-input" value="false" checked />
+                <label class="form-check-label">False</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="mb-3 row">
+        <div class="col-sm-6 offset-sm-2">
+            <button type="submit" class="btn btn-primary">Create Task</button>
+        </div>
+    </div>
+
+</form>
