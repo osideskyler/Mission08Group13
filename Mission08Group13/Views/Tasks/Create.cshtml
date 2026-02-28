@@ -6,10 +6,10 @@
 
 <h2>Create Task</h2>
 
-@if (ViewBag.SubmittedTask != null)
+@if (ViewBag.SubmittedTaskItem != null)
 {
     <div class="alert alert-success">
-        Task '@ViewBag.SubmittedTask' submitted.
+        Task '@ViewBag.SubmittedTaskItem' submitted.
     </div>
 }
 
@@ -38,10 +38,10 @@
         <div class="col-sm-6">
             <select asp-for="Quadrant" class="form-select">
                 <option value="">-- Select Quadrant --</option>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
             </select>
             <span asp-validation-for="Quadrant" class="text-danger"></span>
         </div>
@@ -53,11 +53,8 @@
         <div class="col-sm-6">
             <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select">
                 <option value="">-- Select Category --</option>
-                <option>Home</option>
-                <option>School</option>
-                <option>Work</option>
-                <option>Church</option>
             </select>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
         </div>
     </div>
 

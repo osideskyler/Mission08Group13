@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mission08Group13.Models;
+using Microsoft.EntityFrameworkCore; 
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SQLitePCL;
@@ -8,9 +9,10 @@ namespace Mission08Group13.Controllers
 {
     public class TasksController : Controller
     {
-        private TaskContext _context;
+        private TaskItemContext _context;
 
-        public TasksController(TaskContext context)
+        // Change TaskContext to TaskItemContext here as well
+        public TasksController(TaskItemContext context)
         {
             _context = context;
         }
@@ -22,7 +24,12 @@ namespace Mission08Group13.Controllers
         [HttpGet]
         public IActionResult Quadrants()
         {
-            return View();
+            var tasks = _context.Tasks
+                .Include(x => x.Category)
+                .Where(x => x.Completed == false)
+                .ToList();
+
+            return View(tasks);
         }
 
         
