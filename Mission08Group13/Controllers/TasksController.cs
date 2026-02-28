@@ -11,8 +11,8 @@ namespace Mission08Group13.Controllers
         {
             return View();
         }
-
-        public IActionResult Quadrant()
+        [HttpGet]
+        public IActionResult Quadrants()
         {
             return View();
         }
