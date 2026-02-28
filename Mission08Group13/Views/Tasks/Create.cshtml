@@ -51,7 +51,7 @@
     <div class="mb-3 row">
         <label asp-for="Category" class="col-sm-2 col-form-label">Category</label>
         <div class="col-sm-6">
-            <select asp-for="Category" class="form-select">
+            <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select">
                 <option value="">-- Select Category --</option>
                 <option>Home</option>
                 <option>School</option>

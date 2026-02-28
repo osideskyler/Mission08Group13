@@ -1,11 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mission08Group13.Models;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using SQLitePCL;
 
 namespace Mission08Group13.Controllers
 {
     public class TasksController : Controller
     {
+        private TaskContext _context;
+
+        public TasksController(TaskContext context)
+        {
+            _context = context;
+        }
       
         public IActionResult Landing()
         {
@@ -17,23 +25,22 @@ namespace Mission08Group13.Controllers
             return View();
         }
 
-        private static List<TaskItem> _tasks = new List<TaskItem>();
-        private static int _nextId = 1;
-
+        
+        [HttpGet]
         public IActionResult Create(string submittedTask = null)
         {
-            ViewBag.SubmittedTask = submittedTask;
+            ViewBag.SubmittedTaskItem = submittedTask;
+            ViewBag.Categories = new SelectList(_context.Categories, "CategoryId", "CategoryName");
             return View();
         }
-
 
         [HttpPost]
         public IActionResult Create(TaskItem taskItem)
         {
             if (ModelState.IsValid)
             {
-                taskItem.Id = _nextId++;
-                _tasks.Add(taskItem);
+                _context.Tasks.Add(taskItem);
+                _context.SaveChanges();
 
                 return RedirectToAction("Create", new { submittedTask = taskItem.Name });
             }
