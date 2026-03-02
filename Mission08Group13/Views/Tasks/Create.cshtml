@@ -1,10 +1,10 @@
-﻿@model Mission08Group13.Models.TaskItem
+@model Mission08Group13.Models.TaskItem
 @{
-    ViewData["Title"] = "Create Task";
+    ViewData["Title"] = Model?.Id > 0 ? "Edit Task" : "Create Task";
     Layout = "_Layout";
 }
 
-<h2>Create Task</h2>
+<h2>@(Model?.Id > 0 ? "Edit Task" : "Create Task")</h2>
 
 @if (ViewBag.SubmittedTaskItem != null)
 {
@@ -14,6 +14,10 @@
 }
 
 <form asp-action="Create" method="post">
+    @if (Model?.Id > 0)
+    {
+        <input type="hidden" asp-for="Id" />
+    }
 
     <!-- Task Name -->
     <div class="mb-3 row">
@@ -76,7 +80,7 @@
     <!-- Submit Button -->
     <div class="mb-3 row">
         <div class="col-sm-6 offset-sm-2">
-            <button type="submit" class="btn btn-primary">Create Task</button>
+            <button type="submit" class="btn btn-primary">@(Model?.Id > 0 ? "Update Task" : "Create Task")</button>
         </div>
     </div>
 

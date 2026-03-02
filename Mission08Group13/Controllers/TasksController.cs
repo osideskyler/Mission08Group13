@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Mission08Group13.Models;
 using Microsoft.EntityFrameworkCore; 
 using System.Collections.Generic;
@@ -21,6 +21,7 @@ namespace Mission08Group13.Controllers
         {
             return View();
         }
+
         [HttpGet]
         public IActionResult Quadrants()
         {
@@ -42,6 +43,7 @@ namespace Mission08Group13.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(TaskItem taskItem)
         {
             if (ModelState.IsValid)
@@ -49,10 +51,44 @@ namespace Mission08Group13.Controllers
                 _context.Tasks.Add(taskItem);
                 _context.SaveChanges();
 
+                if (taskItem.Id > 0)
+                {
+                    var existing = _tasks.FirstOrDefault(t => t.Id == taskItem.Id);
+                    if (existing != null)
+                    {
+                        existing.Name = taskItem.Name;
+                        existing.DueDate = taskItem.DueDate;
+                        existing.Quadrant = taskItem.Quadrant;
+                        existing.Category = taskItem.Category;
+                        existing.Completed = taskItem.Completed;
+                        return RedirectToAction(nameof(Quadrants));
+                    }
+                }
+                taskItem.Id = _nextId++;
+                _tasks.Add(taskItem);
                 return RedirectToAction("Create", new { submittedTask = taskItem.Name });
             }
-
             return View(taskItem);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Complete(int id)
+        {
+            var task = _tasks.FirstOrDefault(t => t.Id == id);
+            if (task != null)
+                task.Completed = true;
+            return RedirectToAction(nameof(Quadrants));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
+        {
+            var task = _tasks.FirstOrDefault(t => t.Id == id);
+            if (task != null)
+                _tasks.Remove(task);
+            return RedirectToAction(nameof(Quadrants));
         }
     }
 }
