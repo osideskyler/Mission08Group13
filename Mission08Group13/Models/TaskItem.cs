@@ -14,7 +14,8 @@ namespace Mission08Group13.Models
         [Range(1,4)]
         public int Quadrant { get; set; }
         [Required]
-        public string Category { get; set; }
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
         public bool Completed { get; set; } = false;
     }
 }

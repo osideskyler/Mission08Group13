@@ -1,15 +1,22 @@
 using Microsoft.AspNetCore.Mvc;
 using Mission08Group13.Models;
+using Microsoft.EntityFrameworkCore; 
 using System.Collections.Generic;
-using System.Linq;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using SQLitePCL;
 
 namespace Mission08Group13.Controllers
 {
     public class TasksController : Controller
     {
-        private static List<TaskItem> _tasks = new List<TaskItem>();
-        private static int _nextId = 1;
+        private TaskItemContext _context;
 
+        // Change TaskContext to TaskItemContext here as well
+        public TasksController(TaskItemContext context)
+        {
+            _context = context;
+        }
+      
         public IActionResult Landing()
         {
             return View();
@@ -18,22 +25,21 @@ namespace Mission08Group13.Controllers
         [HttpGet]
         public IActionResult Quadrants()
         {
-            var incomplete = _tasks.Where(t => !t.Completed).ToList();
-            return View(incomplete);
+            var tasks = _context.Tasks
+                .Include(x => x.Category)
+                .Where(x => x.Completed == false)
+                .ToList();
+
+            return View(tasks);
         }
 
+        
         [HttpGet]
-        public IActionResult Create(int? id, string submittedTask = null)
+        public IActionResult Create(string submittedTask = null)
         {
-            ViewBag.SubmittedTask = submittedTask;
-            if (id.HasValue)
-            {
-                var task = _tasks.FirstOrDefault(t => t.Id == id.Value);
-                if (task != null)
-                    return View(task);
-                return RedirectToAction(nameof(Quadrants));
-            }
-            return View(new TaskItem());
+            ViewBag.SubmittedTaskItem = submittedTask;
+            ViewBag.Categories = new SelectList(_context.Categories, "CategoryId", "CategoryName");
+            return View();
         }
 
         [HttpPost]
@@ -42,6 +48,9 @@ namespace Mission08Group13.Controllers
         {
             if (ModelState.IsValid)
             {
+                _context.Tasks.Add(taskItem);
+                _context.SaveChanges();
+
                 if (taskItem.Id > 0)
                 {
                     var existing = _tasks.FirstOrDefault(t => t.Id == taskItem.Id);
